@@ -1,5 +1,10 @@
 const express = require("express");
+
 const PORT = process.env.PORT || 3000;
+
+const AuthCheckpoint = require("./middleware/auth.js"); 
+
+require('dotenv').config();
 
 const app = express();
 
