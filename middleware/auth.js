@@ -7,7 +7,7 @@ function AuthCheckpoint(req, res, next) {
     res.status(401).json({ error: "Not Authorized!" });
   }
 
-  next(req, res, next);
+  next();
 }
 
 module.exports = { AuthCheckpoint };

@@ -2,17 +2,31 @@ const express = require("express");
 
 const PORT = process.env.PORT || 3000;
 
-const AuthCheckpoint = require("./middleware/auth.js"); 
+const AuthCheckpoint = require("./middleware/auth.js");
+const gamesRouter = require("./Routers/games.js");
 
-require('dotenv').config();
+require("dotenv").config();
 
 const app = express();
 
 app.use(express.urlencoded({ extended: true }));
 
+app.get("/games", AuthCheckpoint, gamesRouter);
+
 app.get("/test", (req, res, next) =>
   res.status(200).send("coming live from the test route!"),
 );
+
+app.use((req, res, next) => {
+  return next(new NotFoundError(`404: Not Found! path: ${req.path}`));
+});
+
+app.use((err, req, res, next) => {
+  console.error(err);
+  res
+    .status(err.statusCode || 500)
+    .send(err.name + " " + err.statusCode + ": " + err.message);
+});
 
 app.listen(PORT, () => {
   console.log(`listening on port ${PORT}`);
