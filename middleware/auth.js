@@ -1,5 +1,5 @@
-function AuthCheckpoint(req, res, next) {
-  const secret = process.env.SECRET;
+function authCheckpoint(req, res, next) {
+  const secret = process.env.PROXY_SECRET;
 
   const apiKey = req.get("X-API-Key");
 
@@ -10,4 +10,4 @@ function AuthCheckpoint(req, res, next) {
   next();
 }
 
-module.exports = { AuthCheckpoint };
+module.exports = { authCheckpoint };

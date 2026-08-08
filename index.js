@@ -2,7 +2,8 @@ const express = require("express");
 
 const PORT = process.env.PORT || 3000;
 
-const AuthCheckpoint = require("./middleware/auth.js");
+const authCheckpoint = require("./middleware/auth.js");
+const tokenValidator = require("./middleware/token.js");
 const gamesRouter = require("./Routers/games.js");
 
 require("dotenv").config();
@@ -11,7 +12,11 @@ const app = express();
 
 app.use(express.urlencoded({ extended: true }));
 
-app.get("/games", AuthCheckpoint, gamesRouter);
+app.get("/games",
+  authCheckpoint,
+  tokenValidator,
+  gamesRouter
+);
 
 app.get("/test", (req, res, next) =>
   res.status(200).send("coming live from the test route!"),
