@@ -5,13 +5,14 @@ const { fetchGameData } = require("../utils/fetch");
 gamesRouter.get("/featured", async (req, res, next) => {
   // 100 days in seconds subtracted from todays date.
 
-  const secondsToSub = 8640000;
+  const hundredDays = 100 * 24 * 60 * 60;
   const currentTime = Date.now() / 1000;
-  const featTime = currentTime - secondsToSub;
+  const timeWindow = currentTime - hundredDays;
+  console.log("timeWindow", timeWindow);
   try {
     const featuredData = await fetchGameData(
       req.token,
-      `fields id,name,rating,cover.*, url; where rating > 75 & first_release_date > ${featTime}; sort rating desc;`,
+      `fields id,name,rating,cover.*,url; where rating > 75 & first_release_date > ${timeWindow}; sort rating desc;`,
     );
 
     return res.status(200).json(featuredData);
@@ -25,7 +26,7 @@ gamesRouter.get("/goat", async (req, res, next) => {
   try {
     const greatestData = await fetchGameData(
       req.token,
-      `fields name,rating, cover.* url; limit 20; sort rating desc;`,
+      `fields name,rating,cover.*,url; limit 20; sort rating desc;`,
     );
     return res.status(200).json(greatestData);
   } catch (err) {
@@ -33,18 +34,20 @@ gamesRouter.get("/goat", async (req, res, next) => {
   }
 });
 
-gamesRouter.get("/search", async (req, res, next) => {
-  // search with query parameters
-  const { query } = req.query;
-  try {
-    const searchQuery = await fetchGameData(
-      req.token,
-      `search "${query}"; fields name,release_dates.human;`,
-    );
-    return res.status(200).json(searchQuery);
-  } catch (err) {
-    return next(err);
-  }
-});
+// search with query parameters
+// Do not push until input validation
+// gamesRouter.get("/search", async (req, res, next) => {
+//   const { query } = req.query;
+//   try {
+//     const searchQuery = await fetchGameData(
+//       req.token,
+//       `search "${query}"; fields name,release_dates.human;`,
+//     );
+//     return res.status(200).json(searchQuery);
+//   } catch (err) {
+//     return next(err);
+//   }
+// });
+//
 
 module.exports = { gamesRouter };

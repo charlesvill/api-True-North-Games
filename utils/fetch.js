@@ -1,4 +1,5 @@
 async function fetchGameData(token, body) {
+  console.log("Body: ", body);
   try {
     const response = await fetch("https://api.igdb.com/v4/games", {
       method: "POST",
@@ -11,6 +12,7 @@ async function fetchGameData(token, body) {
     });
 
     if (!response.ok) {
+      console.error(response);
       throw new Error(`IGDB returned ${response.status}`);
     }
 
