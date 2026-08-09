@@ -26,7 +26,7 @@ gamesRouter.get("/goat", async (req, res, next) => {
   try {
     const greatestData = await fetchGameData(
       req.token,
-      `fields name,rating,cover.*,url; limit 20; sort rating desc;`,
+      `fields name,rating,cover.*,url; limit 20; sort rating_count desc;`,
     );
     return res.status(200).json(greatestData);
   } catch (err) {
