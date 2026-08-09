@@ -1,35 +1,47 @@
 const gamesRouter = require("express").Router();
 
-async function fetchGameData(token, body) {
-  try {
-    const response = await fetch("https://api.igdb.com/v4/games", {
-      method: "POST",
-      headers: {
-        Accept: "application/json",
-        "Client-ID": process.env.CLIENT_ID,
-        Authorization: `Bearer ${token}`,
-      },
-      body: body,
-    });
-
-    if (!response.ok) {
-      throw new Error(`IGDB returned ${response.status}`);
-    }
-
-    return await response.json();
-  } catch (err) {
-    throw err;
-  }
-}
+const { fetchGameData } = require("../utils/fetch");
 
 gamesRouter.get("/featured", async (req, res, next) => {
+  // 100 days in seconds subtracted from todays date.
+
+  const secondsToSub = 8640000;
+  const currentTime = Date.now() / 1000;
+  const featTime = currentTime - secondsToSub;
   try {
     const featuredData = await fetchGameData(
       req.token,
-      "fields id,name,rating,cover.*, url; where rating > 75 & first_release_date > 1777222981; sort rating desc;"
+      `fields id,name,rating,cover.*, url; where rating > 75 & first_release_date > ${featTime}; sort rating desc;`,
     );
 
     return res.status(200).json(featuredData);
+  } catch (err) {
+    return next(err);
+  }
+});
+
+gamesRouter.get("/goat", async (req, res, next) => {
+  // will pull the best games of all time
+  try {
+    const greatestData = await fetchGameData(
+      req.token,
+      `fields name,rating, cover.* url; limit 20; sort rating desc;`,
+    );
+    return res.status(200).json(greatestData);
+  } catch (err) {
+    return next(err);
+  }
+});
+
+gamesRouter.get("/search", async (req, res, next) => {
+  // search with query parameters
+  const { query } = req.query;
+  try {
+    const searchQuery = await fetchGameData(
+      req.token,
+      `search "${query}"; fields name,release_dates.human;`,
+    );
+    return res.status(200).json(searchQuery);
   } catch (err) {
     return next(err);
   }

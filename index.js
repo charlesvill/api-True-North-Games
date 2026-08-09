@@ -12,11 +12,7 @@ const app = express();
 
 app.use(express.urlencoded({ extended: true }));
 
-app.use("/games",
-  authCheckpoint,
-  tokenValidator,
-  gamesRouter
-);
+app.use("/games", authCheckpoint, tokenValidator, gamesRouter);
 
 app.get("/test", (req, res, next) =>
   res.status(200).send("coming live from the test route!"),
