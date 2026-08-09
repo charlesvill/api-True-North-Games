@@ -6,7 +6,7 @@ gamesRouter.get("/featured", async (req, res, next) => {
   // 100 days in seconds subtracted from todays date.
 
   const hundredDays = 100 * 24 * 60 * 60;
-  const currentTime = Date.now() / 1000;
+  const currentTime = Math.floor(Date.now() / 1000);
   const timeWindow = currentTime - hundredDays;
   console.log("timeWindow", timeWindow);
   try {
