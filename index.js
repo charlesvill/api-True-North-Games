@@ -1,4 +1,5 @@
 const express = require("express");
+const cors = require("cors");
 
 const PORT = process.env.PORT || 3000;
 
@@ -11,7 +12,13 @@ require("dotenv").config();
 const app = express();
 
 app.use(express.urlencoded({ extended: true }));
-
+app.use(
+  cors({
+    origin: true,
+    methods: ["GET"],
+    allowedHeaders: ["Content-Type", "Authorization", "X-API-Key"],
+  }),
+);
 app.use("/games", authCheckpoint, tokenValidator, gamesRouter);
 
 app.get("/test", (req, res, next) =>
