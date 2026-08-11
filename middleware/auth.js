@@ -3,12 +3,14 @@ function authCheckpoint(req, res, next) {
 
   const apiKey = req.get("X-API-Key");
 
-  console.log(typeof apiKey, apiKey);
-  console.log(typeof secret, secret);
-  if (apiKey !== secret) {
-    return res.status(401).json({ error: "Not Authorized!" });
-  }
+  // console.log(typeof apiKey, apiKey);
+  // console.log(typeof secret, secret);
 
+  if (apiKey !== secret) {
+    const error = new Error("Not Authorized to Access Proxy!");
+    error.status = 401;
+    next(error);
+  }
   next();
 }
 
