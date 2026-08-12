@@ -12,7 +12,7 @@ gamesRouter.get("/featured", async (req, res, next) => {
   try {
     const featuredData = await fetchGameData(
       req.token,
-      `fields id,name,slug,rating,cover.*,url, first_release_date; where rating > 75 & first_release_date > ${timeWindow}; sort rating desc;`,
+      `fields id,name,slug,rating,cover.*,screenshots.*,artworks.*,url, first_release_date; where rating > 75 & first_release_date > ${timeWindow}; sort rating desc;`,
     );
 
     return res.status(200).json(featuredData);
@@ -26,7 +26,7 @@ gamesRouter.get("/goat", async (req, res, next) => {
   try {
     const greatestData = await fetchGameData(
       req.token,
-      `fields id,name,rating,cover.*,url; limit 20; sort rating_count desc;`,
+      `fields id,name,rating,cover.*,screenshots.*,artworks.*,url; limit 20; sort rating_count desc;`,
     );
     return res.status(200).json(greatestData);
   } catch (err) {
