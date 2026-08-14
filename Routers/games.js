@@ -34,20 +34,26 @@ gamesRouter.get("/goat", async (req, res, next) => {
   }
 });
 
-// search with query parameters
-// Do not push until input validation
-// gamesRouter.get("/search", async (req, res, next) => {
-//   const { query } = req.query;
-//   try {
-//     const searchQuery = await fetchGameData(
-//       req.token,
-//       `search "${query}"; fields id,name,slug,rating,cover.*,first_release_date,url; where rating > 75 & first_release_date > ${timeWindow}; sort rating desc;`,
-//     );
-//     return res.status(200).json(searchQuery);
-//   } catch (err) {
-//     return next(err);
-//   }
-// });
-//
+gamesRouter.get("/search", async (req, res, next) => {
+  const { query } = req.query;
+  if (typeof query !== "string") {
+    return res.status(400).send("Invalid search!");
+  }
+
+  let search = query.trim();
+  if (search.length < 2 || search.length > 50) {
+    return res.status(400).send("Invalid search!");
+  }
+
+  try {
+    const searchQuery = await fetchGameData(
+      req.token,
+      `search "${search}"; fields id,name,slug,rating,cover.*,first_release_date,url; where rating > 75 & first_release_date > ${timeWindow}; sort rating desc;`,
+    );
+    return res.status(200).json(searchQuery);
+  } catch (err) {
+    return next(err);
+  }
+});
 
 module.exports = { gamesRouter };
