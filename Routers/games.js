@@ -2,9 +2,9 @@ const gamesRouter = require("express").Router();
 
 const { fetchGameData } = require("../utils/fetch");
 
+const hundredDays = 100 * 24 * 60 * 60;
 const currentTime = Math.floor(Date.now() / 1000);
 const timeWindow = currentTime - hundredDays;
-const hundredDays = 100 * 24 * 60 * 60;
 
 gamesRouter.get("/featured", async (req, res, next) => {
   // 100 days in seconds subtracted from todays date.
