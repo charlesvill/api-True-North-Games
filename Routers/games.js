@@ -49,7 +49,7 @@ gamesRouter.get("/search", async (req, res, next) => {
   try {
     const searchQuery = await fetchGameData(
       req.token,
-      `search "${search}"; fields id,name,slug,rating,cover.*,first_release_date,url; where rating > 75 & first_release_date > ${timeWindow}; sort rating desc;`,
+      `search "${search}"; fields id,name,slug,rating,cover.*,first_release_date; where rating > 75; sort rating desc;`,
     );
     return res.status(200).json(searchQuery);
   } catch (err) {
