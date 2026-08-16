@@ -13,7 +13,7 @@ gamesRouter.get("/featured", async (req, res, next) => {
   try {
     const featuredData = await fetchGameData(
       req.token,
-      `fields id,name,slug,rating,cover.*,screenshots.*,artworks.*,url, first_release_date; where rating > 75 & first_release_date > ${timeWindow}; sort total_rating_count desc;`,
+      `fields id,name,slug,rating,cover.*,screenshots.*,artworks.*,url,first_release_date; where rating > 75 & first_release_date > ${timeWindow}; sort total_rating_count desc;`,
     );
 
     return res.status(200).json(featuredData);
@@ -49,7 +49,7 @@ gamesRouter.get("/search", async (req, res, next) => {
   try {
     const searchQuery = await fetchGameData(
       req.token,
-      `search "${search}"; fields id,name,slug,rating,cover.*,first_release_date; where rating > 75; sort rating desc;`,
+      `search "${search}"; fields id,name,slug,cover.*,rating,first_release_date; limit 8; where game_type = 0 & first_release_date != null & version_parent = null & rating != null;`,
     );
     return res.status(200).json(searchQuery);
   } catch (err) {
