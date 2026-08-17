@@ -57,4 +57,21 @@ gamesRouter.get("/search", async (req, res, next) => {
   }
 });
 
+gamesRouter.get("/:gameId(\\d+)", async (req, res, next) => {
+  const { gameId } = req.params;
+
+  if (!/^\d+$/.test(gameId)) {
+    return next();
+  }
+  try {
+    const searchQuery = await fetchGameData(
+      req.token,
+      `fields id,name,slug,rating,cover.*,screenshots.*,artworks.*,url,first_release_date; where id = ${gameId};`,
+    );
+    return res.status(200).json(searchQuery);
+  } catch (err) {
+    return next(err);
+  }
+});
+
 module.exports = { gamesRouter };
