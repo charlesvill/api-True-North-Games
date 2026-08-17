@@ -66,7 +66,7 @@ gamesRouter.get("/:gameId", async (req, res, next) => {
   try {
     const searchQuery = await fetchGameData(
       req.token,
-      `fields id,name,slug,rating,genres.*,cover.*,screenshots.*,artworks.*,url,first_release_date; where id = ${gameId};`,
+      `fields id,name,slug,rating,genres.*,age_ratings,game_type,dlcs,game_engines,involved_companies,platforms.*,similar_games,storyline,summary,tags,themes,websites.*,cover.*,screenshots.*,artworks.*,url,first_release_date; where id = ${gameId};`,
     );
     return res.status(200).json(searchQuery);
   } catch (err) {
