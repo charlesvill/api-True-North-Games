@@ -57,7 +57,7 @@ gamesRouter.get("/search", async (req, res, next) => {
   }
 });
 
-gamesRouter.get("/:gameId(\\d+)", async (req, res, next) => {
+gamesRouter.get("/:gameId", async (req, res, next) => {
   const { gameId } = req.params;
 
   if (!/^\d+$/.test(gameId)) {
